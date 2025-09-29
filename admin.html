@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم العقارات - إعمار الشرفة للعقار</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hidden { display: none; }
+    .admin-section { max-width: 600px; margin: 30px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ccc; padding: 16px; }
+    input, button { font-size: 1em; margin: 4px 0; padding: 7px; }
+    .password-section { text-align: center; margin-top: 80px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>لوحة تحكم العقارات</h1>
+  </header>
+  <div id="password-section" class="password-section">
+    <h3>الرجاء إدخال الرقم السري</h3>
+    <input type="password" id="admin-password" placeholder="الرقم السري">
+    <button onclick="checkPassword()">دخول</button>
+    <div id="password-error" style="color:red; margin-top:10px;"></div>
+  </div>
+  <section id="admin-section" class="admin-section hidden">
+    <h2>إضافة عقار جديد</h2>
+    <form id="addPropertyForm">
+      <input type="text" id="name" placeholder="اسم العقار" required /><br>
+      <input type="text" id="type" placeholder="النوع (بيع/إيجار/أرض)" required /><br>
+      <input type="text" id="location" placeholder="الموقع" required /><br>
+      <input type="text" id="area" placeholder="المساحة" required /><br>
+      <input type="text" id="price" placeholder="السعر" required /><br>
+      <button type="submit">إضافة العقار</button>
+    </form>
+    <hr>
+    <h3>العقارات الحالية</h3>
+    <ul id="propertiesList"></ul>
+    <p style="color: #777; font-size: 0.9em;">ملاحظة: البيانات تحفظ فقط في المتصفح، تحتاج Backend للحفظ الدائم.</p>
+  </section>
+  <script>
+    // كلمة السر للوحة التحكم
+    const ADMIN_PASSWORD = '123456';
+
+    // تحقق من كلمة السر
+    function checkPassword() {
+      const input = document.getElementById('admin-password').value;
+      if(input === ADMIN_PASSWORD) {
+        document.getElementById('password-section').classList.add('hidden');
+        document.getElementById('admin-section').classList.remove('hidden');
+        loadProperties();
+      } else {
+        document.getElementById('password-error').textContent = 'الرقم السري غير صحيح!';
+      }
+    }
+
+    // إدارة العقارات في LocalStorage (كمثال)
+    function loadProperties() {
+      const list = document.getElementById('propertiesList');
+      list.innerHTML = '';
+      const properties = JSON.parse(localStorage.getItem('properties') || '[]');
+      properties.forEach((prop, idx) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <b>${prop.name}</b> | ${prop.type} | ${prop.location} | ${prop.area} | ${prop.price}
+          <button onclick="deleteProperty(${idx})" style="margin-right:10px;">حذف</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function deleteProperty(idx) {
+      const properties = JSON.parse(localStorage.getItem('properties') || '[]');
+      properties.splice(idx, 1);
+      localStorage.setItem('properties', JSON.stringify(properties));
+      loadProperties();
+    }
+
+    document.getElementById('addPropertyForm').onsubmit = function(e) {
+      e.preventDefault();
+      const prop = {
+        name: document.getElementById('name').value,
+        type: document.getElementById('type').value,
+        location: document.getElementById('location').value,
+        area: document.getElementById('area').value,
+        price: document.getElementById('price').value
+      };
+      const properties = JSON.parse(localStorage.getItem('properties') || '[]');
+      properties.push(prop);
+      localStorage.setItem('properties', JSON.stringify(properties));
+      loadProperties();
+      this.reset();
+    }
+
+    // للسماح بالضغط على Enter
+    document.getElementById('admin-password').addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        checkPassword();
+      }
+    });
+  </script>
+</body>
+</html>
