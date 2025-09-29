@@ -1,0 +1,61 @@
+body {
+  font-family: "Tajawal", Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+header {
+  background: #3498db;
+  color: #fff;
+  padding: 24px 0;
+  text-align: center;
+}
+.logo {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+nav {
+  background: #2374a1;
+  text-align: center;
+  padding: 10px 0;
+}
+nav a {
+  color: #fff;
+  margin: 0 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+section {
+  margin: 24px auto;
+  width: 90%;
+  max-width: 900px;
+  background: #fff;
+  box-shadow: 0 2px 8px #ccc;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.property-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.property {
+  background: #f1f1f1;
+  border-radius: 8px;
+  padding: 12px;
+  flex: 1 1 250px;
+  min-width: 220px;
+}
+
+footer {
+  margin: 32px 0 0 0;
+  text-align: center;
+  background: #eee;
+  padding: 20px 0;
+}
